@@ -1,0 +1,86 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Dom Viewer XML/HTML</title>
+  <meta name="Dom Viewer XML/HTML" />
+  <meta name="Etienne Motara" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css" />
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <h1>Visualisateur de DOM HTML/XML</h1>
+    <p id="errorAjax"></p>
+    
+  <div class="form-row" style="margin-left: 2%">
+    <div class="form-group col-md-2">
+      <label class="col-form-label" for="inputEnregistrerDoc">Enregistrer le fichier : </label>
+      <input id="inputEnregistrerDoc" class="btn btn-primary" type="button" value="Enregistrer le document" onclick="enregistrerDocument()"
+      />
+    </div>
+    <div class="form-group col-md-10">
+      <label class="col-form-label">Récupérer un fichier : </label>
+      <div class="form-row">
+        <div class="col-md-6">
+          <input class="form-control" id="urlInputGetDocument" type="text" placeholder="Indiquer l'id du document" />
+        </div>
+        <div class="col-md-6">
+          <input class="btn btn-primary" type="button" value="Récupérer le document" onclick="recupererDocument()" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row" style="margin-left: 2%">
+    <div class="form-group col-md-5">
+      <label class="col-form-label" for="uploadInput">Uploader le fichier <span class="warn">(HTML ou XML seulement)</span> : </label>
+      <input class="form-control" id="uploadInput" type="file"></input>
+    </div>
+    <div class="col-md-2">
+      <input class="btn btn-success" id="visualize" type="button" value="Visualiser" onclick="visualize()" />
+    </div>
+    <div class="form-group col-md-5">
+      <label class="col-form-label" for="urlInput">Entrez l'url du fichier<span class="warn">(HTML ou XML seulement)</span> : </label>
+      <input class="form-control" id="urlInput" type="text" placeholder="http://..."></input>
+    </div>
+  </div>
+
+  <!-- Visualisateur -->
+  <div class="separationH"></div>
+  <div id="zones">
+    <div id="structureArborescente">
+      <h2>Structure arborescente : </h2>
+    </div>
+    <div class="separationV"></div>
+    <div id="zoneAffichage">
+      <h2 class='titreZoneAfichage'>Zone d'affichage : </h2>
+    </div>
+  </div>
+  <div class="separationH"></div>
+  <div id="infoElement">
+    <h2>Informations Balise :</h2>
+    <ul class="list-group">
+    </ul>
+  </div>
+
+  <!-- fin visualisateur -->
+
+  <!-- jQuery first, Popper.js, Bootstrap JS  -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+    crossorigin="anonymous"></script>
+
+  <!-- application -->
+  <script src="scripts.js"></script>
+</body>
+
+</html>

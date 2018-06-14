@@ -1,0 +1,62 @@
+h1{
+    text-align: center;
+}
+
+#errorAjax{
+    margin-left: 2%;
+    margin-top: 2%;
+}
+
+.warn{
+    color: red;
+}
+
+#visualize{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    margin-top: 15%;
+}
+
+#zones{
+    display: flex;
+    justify-content: space-around;    
+}
+
+#structureArborescente h2{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#zoneAffichage h2{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#infoElement h2{
+    margin-left: auto;
+    margin-right: auto;
+    width: 18%;
+}
+
+.separationV{
+    display: block;
+    border: dashed black 1px;
+}
+.separationH{
+    display: block;
+    border: dashed black 1px;
+    width: 100%;
+    height: 1px;
+}
+
+#zoneAffichage *:not(.titreZoneAfichage) {
+    opacity:0.8;
+}
+
+#zoneAffichage *:not(.titreZoneAfichage):hover {
+    opacity:1;
+    color: rgba(235, 60, 37, 0.75);
+    font-weight: bold;
+}
+
