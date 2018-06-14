@@ -221,10 +221,12 @@ function enregistrerDocument() {
     getDocOnJSON();
 
     var req = new XMLHttpRequest();
-    var url = "ipWei"
+    var url = "http://127.0.0.1:5000/document/register"
     req.open("POST", url, false);
-    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    req.send(getDocOnJSON());
+    req.setRequestHeader('Content-Type', 'application/json');
+    var txt = getDocOnJSON();
+    console.log(txt)
+    req.send(txt);
 
     if (req.status === 200) {
         document.getElementById("errorAjax").innerHTML = 'Enregistrement réussi !';
