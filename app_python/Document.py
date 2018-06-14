@@ -30,13 +30,6 @@ class Document:
         return jsonify({'result' : output})
 
     def findDoc(self):
-        doc_id = self.documentBD.find_one({'_id': self.html})
-        if doc_id:
-            output = {'id': doc_id['_id'], 'html': doc_id['html']}
-        else :
-            output="nada"
-        return jsonify({'result': output})
-    def findDoc(self):
         doc_id=self.documentBD.find_one({"_id": ObjectId(self.html)})
         if doc_id:
             output = {'id': str(doc_id['_id']), 'html': str(doc_id['html'])}
