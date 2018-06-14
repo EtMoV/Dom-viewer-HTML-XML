@@ -1,0 +1,153 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dom Viewer XML/HTML</title>
+    <meta name="Dom Viewer XML/HTML" />
+    <meta name="Etienne Motara" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="auth.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <div class="search-box">
+                    <div class="caption">
+                        <h3>Authentification</h3>
+                        <p>Visualisateur de DOM HTML/XML</p>
+                        <p id="reponseAjax"></p>
+                    </div>
+                    <div class="loginForm">
+                        <div class="input-group">
+                            <input type="text" id="name" class="form-control" placeholder="Identifiant">
+                            <input type="password" id="paw" class="form-control" placeholder="Mot de passe">
+                            <input type="submit" id="submitConnexion" class="form-control" value="Se connecter" onclick="connexion()" disabled>
+                            <input type="submit" id="submit" class="form-control" value="S'enregistrer" onclick="register()" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="aro-pswd_info">
+                    <div id="pswd_info">
+                        <h4>Le mot de passe doit être:</h4>
+                        <ul>
+                            <li id="letter" class="invalid">At least
+                                <strong>one letter</strong>
+                            </li>
+                            <li id="capital" class="invalid">At least
+                                <strong>one capital letter</strong>
+                            </li>
+                            <li id="number" class="invalid">At least
+                                <strong>one number</strong>
+                            </li>
+                            <li id="length" class="invalid">Be at least
+                                <strong>8 characters</strong>
+                            </li>
+                            <li id="space" class="invalid">be
+                                <strong> use [~,!,@,#,$,%,^,&,*,-,=,.,;,']</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery first, Popper.js, Bootstrap JS  -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            var length8;
+            var letterValide;
+            var capitalLetterValide;
+            var number;
+            var space;
+            $('input[type=password]').keyup(function () {
+                var pswd = $(this).val();
+                document.getElementById("submit").disable = true;
+                //validate the length
+                if (pswd.length < 8) {
+                    $('#length').removeClass('valid').addClass('invalid');
+                    length8 = true;
+                } else {
+                    $('#length').removeClass('invalid').addClass('valid');
+                    length8 = false;
+                }
+
+                //validate letter
+                if (pswd.match(/[A-z]/)) {
+                    $('#letter').removeClass('invalid').addClass('valid');
+                    letterValide = true;
+                } else {
+                    $('#letter').removeClass('valid').addClass('invalid');
+                    letterValide = false;
+                }
+
+                //validate capital letter
+                if (pswd.match(/[A-Z]/)) {
+                    $('#capital').removeClass('invalid').addClass('valid');
+                    capitalLetterValide = true;
+                } else {
+                    $('#capital').removeClass('valid').addClass('invalid');
+                    capitalLetterValide = false;
+                }
+
+                //validate number
+                if (pswd.match(/\d/)) {
+                    $('#number').removeClass('invalid').addClass('valid');
+                    var number = true;
+                } else {
+                    $('#number').removeClass('valid').addClass('invalid');
+                    var number = false;
+                }
+
+                //validate space
+                if (pswd.match(/[^a-zA-Z0-9\-\/]/)) {
+                    $('#space').removeClass('invalid').addClass('valid');
+                    var space = true;
+                } else {
+                    $('#space').removeClass('valid').addClass('invalid');
+                    var space = false;
+                }
+
+                //Vérification global;
+
+                if (letterValide && capitalLetterValide && number && space) {
+                    document.getElementById("submit").disabled = false;
+                    document.getElementById("submitConnexion").disabled = false;
+                    document.getElementById("submit").style.backgroundColor = "red";
+                    document.getElementById("submitConnexion").style.backgroundColor = "red";
+                } else {
+                    document.getElementById("submit").disabled = true;
+                    document.getElementById("submitConnexion").disabled = true;
+                    document.getElementById("submit").style.backgroundColor = "grey";
+                    document.getElementById("submitConnexion").style.backgroundColor = "grey";
+                }
+
+            }).focus(function () {
+                $('#pswd_info').show();
+            }).blur(function () {
+                $('#pswd_info').hide();
+            });
+
+        });
+    </script>
+
+    <script src="auth.js"></script>
+
+</body>
+
+</html>
