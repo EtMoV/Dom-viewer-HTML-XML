@@ -35,6 +35,19 @@ def add_document():
     html = request.json['html']
     return Document.addDocument(Document(html))
 
+@app.route('/document', methods=['POST'])
+def find_document():
+    html = request.json['id_doc']
+    return Document.findDoc(Document(html))
+
+@app.route('/user', methods=['POST'])
+def find_user():
+    name = request.json['name']
+    mdp = request.json['psw']
+    return User.findUser(User(name,mdp))
+
+   
+
 if __name__ == '__main__':
     app.debug = True
     app.run()

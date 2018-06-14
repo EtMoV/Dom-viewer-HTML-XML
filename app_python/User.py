@@ -32,6 +32,14 @@ class User:
             output.append({'name': user['name'], 'psw': user['psw']})
         return jsonify({'result' : output})
 
+    def findUser (self):
+        user = self.users.find_one({'name': self.log, 'psw': self.mdp})
+        if user:
+            output = {'name': user['name'], 'psw': user['psw']}
+        else:
+            output = "pas de compte"
+        return jsonify({'result': output})
+
 #Les fonctions
 @app.route('/users', methods=['GET'])
 def get_all_users():
