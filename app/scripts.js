@@ -1,6 +1,109 @@
 /* Variable global */
 var currentBalise; // sert a faire le lien entre les modifications dans les informations balise et la zone d'affichage
+/*Cache les zones pour réinitialisation */
+function hideZones() {
+  /*document.getElementById("structureArborescente").innerHTML =
+      "<h2>Structure arborescente : </h2>";*/
+  /*document.getElementById("zoneAffichage").innerHTML =
+      "<h2 class='titreZoneAfichage'>Zone d'affichage : </h2>";*/
+  document.getElementById("infoElement").innerHTML =
+    '<h2>Informations Balise :</h2><ul><li id="infoInnerHtml" class="list-group-item"></li><li id="infoTypeBalise" class="list-group-item"></li><li id="infoId" class="list-group-item"></li><li id="infoClass" class="list-group-item"></li><li id="infoTags" class="list-group-item"></li><li id="infoEnfants" class="list-group-item"></li></ul>';
+}
+/* Affiche les enfants pour une balise de la zone d'affichage sélectionnée
+                parents : balise sélectionnée
+            */
+function DisplayChilds(parents) {
+  document.getElementById("infoEnfants").innerHTML = "Enfants : "; // on vide les enfants existants
 
+  var listOfChilds = document.createElement("ul");
+
+  for (var i = 0; i < parents.children.length; ++i) {
+    var child = document.createElement("li");
+    child.innerHTML = parents.children[i].tagName;
+    listOfChilds.appendChild(child);
+  }
+  document.getElementById("infoEnfants").appendChild(listOfChilds);
+}
+
+/* Affiche les tags pour une balise de la zone d'affichage sélectionnée
+                    parents : balise sélectionnée
+                */
+function DisplayTags(parents) {
+  document.getElementById("infoTags").innerHTML = "Tags : "; // on vide les enfants existants
+
+  var listOfTags = document.createElement("ul");
+  if (parents.getAttribute("tags")) {
+    var tags = parents.getAttribute("tags").split(" ");
+    for (var i = 0; i < tags.length; ++i) {
+      var tag = document.createElement("li");
+      tag.innerHTML = tags[i];
+      listOfTags.appendChild(tag);
+    }
+
+    document.getElementById("infoTags").appendChild(listOfTags);
+  }
+
+  var divBootStrapp = document.createElement("div");
+  divBootStrapp.className = "form-row";
+
+  var divBootStrappInput = document.createElement("div");
+  divBootStrappInput.className = "form-col-md-6";
+
+  var divBootStrappButton = document.createElement("div");
+  divBootStrappButton.className = "form-col-md-6";
+
+  var inputAddTag = document.createElement("input");
+  inputAddTag.id = "inputTag";
+  inputAddTag.type = "text";
+  inputAddTag.placeholder = "Entrez le tag";
+  inputAddTag.className = "form-control";
+
+  var inputSubmitAddTag = document.createElement("input");
+  inputSubmitAddTag.type = "button";
+  inputSubmitAddTag.value = "Ajouter un tag";
+  inputSubmitAddTag.className = "btn btn-success";
+
+  inputSubmitAddTag.addEventListener("click", function(e) {
+    addTag();
+  });
+
+  divBootStrappInput.appendChild(inputAddTag);
+  divBootStrappButton.appendChild(inputSubmitAddTag);
+
+  divBootStrapp.appendChild(divBootStrappInput);
+  divBootStrapp.appendChild(divBootStrappButton);
+
+  document.getElementById("infoTags").appendChild(divBootStrapp);
+}
+
+/*
+    Permet d'afficher les informations pour une balise données
+    childrens : Les éléments de la zone d'affichage
+*/
+function getInfoElement(childrens) {
+  for (var child of childrens) {
+    if (child.classList.contains("titreZoneAfichage")) {
+      //il ne faut pas ajouter d'evenement au titre
+      continue; // on continue la boucle
+    }
+    if (child.children.length !== 0) {
+      getInfoElement(child.children);
+    }
+    child.addEventListener("mousedown", function(e) {
+      e.stopPropagation(); // stop la propagation de l'événement pour eviter d'appeler tout les conteneurs de l'element courant
+      currentBalise = this;
+      document.getElementById("infoInnerHtml").innerHTML =
+        "InnerHtml de la balise : " + this.innerHTML;
+      document.getElementById("infoTypeBalise").innerHTML =
+        "Type de balise : " + this.tagName;
+      document.getElementById("infoId").innerHTML = "Id : " + this.id;
+      document.getElementById("infoClass").innerHTML =
+        "Class : " + this.classList;
+      DisplayChilds(this);
+      DisplayTags(this);
+    });
+  }
+}
 /*
     Ajoute des balise <xmp> pour ne pas interpréter du XML ou HTML
     string : chaine de caractère à modifier
@@ -49,15 +152,6 @@ function verifFileExtension(champ, listeExt) {
     onclick => button 'visualiser'
 */
 function visualize() {
-  /*Cache les zones pour réinitialisation */
-  function hideZones() {
-    document.getElementById("structureArborescente").innerHTML =
-      "<h2>Structure arborescente : </h2>";
-    document.getElementById("zoneAffichage").innerHTML =
-      "<h2 class='titreZoneAfichage'>Zone d'affichage : </h2>";
-    document.getElementById("infoElement").innerHTML =
-      '<h2>Informations Balise :</h2><ul><li id="infoInnerHtml" class="list-group-item"></li><li id="infoTypeBalise" class="list-group-item"></li><li id="infoId" class="list-group-item"></li><li id="infoClass" class="list-group-item"></li><li id="infoTags" class="list-group-item"></li><li id="infoEnfants" class="list-group-item"></li></ul>';
-  }
   hideZones();
 
   /* Permet d'afficher les barre horizontale*/
@@ -92,10 +186,10 @@ function visualize() {
         xhr.response,
         "\n-------------"
       );
-      document.getElementById("structureArborescente").innerHTML += addXMP(
+      document.getElementById("structureArborescente").innerHTML = addXMP(
         xhr.response
       );
-      document.getElementById("zoneAffichage").innerHTML += xhr.response;
+      document.getElementById("zoneAffichage").innerHTML = xhr.response;
       hrDisplay();
       document.getElementById("urlInput").value = "";
     } else {
@@ -110,108 +204,13 @@ function visualize() {
     var reader = new FileReader();
     reader.addEventListener("load", function() {
       // document.querySelector('#uploadInput').files[0].name + '" :\n\n' +
-      document.getElementById("structureArborescente").innerHTML += addXMP(
+      document.getElementById("structureArborescente").innerHTML = addXMP(
         reader.result
       );
-      document.getElementById("zoneAffichage").innerHTML += reader.result;
+      document.getElementById("zoneAffichage").innerHTML = reader.result;
       hrDisplay();
       document.getElementById("uploadInput").value = "";
 
-      /* Affiche les enfants pour une balise de la zone d'affichage sélectionnée
-                parents : balise sélectionnée
-            */
-      function DisplayChilds(parents) {
-        document.getElementById("infoEnfants").innerHTML = "Enfants : "; // on vide les enfants existants
-
-        var listOfChilds = document.createElement("ul");
-
-        for (var i = 0; i < parents.children.length; ++i) {
-          var child = document.createElement("li");
-          child.innerHTML = parents.children[i].tagName;
-          listOfChilds.appendChild(child);
-        }
-        document.getElementById("infoEnfants").appendChild(listOfChilds);
-      }
-
-      /* Affiche les tags pour une balise de la zone d'affichage sélectionnée
-                parents : balise sélectionnée
-            */
-      function DisplayTags(parents) {
-        document.getElementById("infoTags").innerHTML = "Tags : "; // on vide les enfants existants
-
-        var listOfTags = document.createElement("ul");
-        if (parents.getAttribute("tags")) {
-          var tags = parents.getAttribute("tags").split(" ");
-          for (var i = 0; i < tags.length; ++i) {
-            var tag = document.createElement("li");
-            tag.innerHTML = tags[i];
-            listOfTags.appendChild(tag);
-          }
-
-          document.getElementById("infoTags").appendChild(listOfTags);
-        }
-
-        var divBootStrapp = document.createElement("div");
-        divBootStrapp.className = "form-row";
-
-        var divBootStrappInput = document.createElement("div");
-        divBootStrappInput.className = "form-col-md-6";
-
-        var divBootStrappButton = document.createElement("div");
-        divBootStrappButton.className = "form-col-md-6";
-
-        var inputAddTag = document.createElement("input");
-        inputAddTag.id = "inputTag";
-        inputAddTag.type = "text";
-        inputAddTag.placeholder = "Entrez le tag";
-        inputAddTag.className = "form-control";
-
-        var inputSubmitAddTag = document.createElement("input");
-        inputSubmitAddTag.type = "button";
-        inputSubmitAddTag.value = "Ajouter un tag";
-        inputSubmitAddTag.className = "btn btn-success";
-
-        inputSubmitAddTag.addEventListener("click", function(e) {
-          addTag();
-        });
-
-        divBootStrappInput.appendChild(inputAddTag);
-        divBootStrappButton.appendChild(inputSubmitAddTag);
-
-        divBootStrapp.appendChild(divBootStrappInput);
-        divBootStrapp.appendChild(divBootStrappButton);
-
-        document.getElementById("infoTags").appendChild(divBootStrapp);
-      }
-
-      /*
-                Permet d'afficher les informations pour une balise données
-                childrens : Les éléments de la zone d'affichage
-            */
-      function getInfoElement(childrens) {
-        for (var child of childrens) {
-          if (child.classList.contains("titreZoneAfichage")) {
-            //il ne faut pas ajouter d'evenement au titre
-            continue; // on continue la boucle
-          }
-          if (child.children.length !== 0) {
-            getInfoElement(child.children);
-          }
-          child.addEventListener("mousedown", function(e) {
-            e.stopPropagation(); // stop la propagation de l'événement pour eviter d'appeler tout les conteneurs de l'element courant
-            currentBalise = this;
-            document.getElementById("infoInnerHtml").innerHTML =
-              "InnerHtml de la balise : " + this.innerHTML;
-            document.getElementById("infoTypeBalise").innerHTML =
-              "Type de balise : " + this.tagName;
-            document.getElementById("infoId").innerHTML = "Id : " + this.id;
-            document.getElementById("infoClass").innerHTML =
-              "Class : " + this.classList;
-            DisplayChilds(this);
-            DisplayTags(this);
-          });
-        }
-      }
       getInfoElement(document.getElementById("zoneAffichage").children);
     });
     reader.readAsText(document.querySelector("#uploadInput").files[0]);
@@ -232,15 +231,17 @@ function visualize() {
 function enregistrerDocument() {
   /* Fonction qui transform la zone d'affichage en document JSON */
   function getDocOnJSON() {
-    var element = Object.assign(document.getElementById("zoneAffichage"));
+    var element = Object.assign(document.querySelector("#zoneAffichage *"));
     var html = element.outerHTML;
     var data = { html: html };
     var json = JSON.stringify(data);
-    var jsonReformate = json.substr(43, json.length - 51); // enleve le debut et la fin de chaine qui sont rajoute par l'application
+    //var jsonReformate = json.substr(43, json.length - 51); // enleve le debut et la fin de chaine qui sont rajoute par l'application
     var debut = '{"html":"';
     var fin = '"}';
-    var jsonReformate = debut + jsonReformate + fin;
-    return jsonReformate;
+    var jsonReformate = debut + json + fin;
+    console.log(json);
+
+    return json;
   }
   getDocOnJSON();
 
@@ -252,7 +253,9 @@ function enregistrerDocument() {
   req.send(txt);
 
   if (req.status === 200) {
-    document.getElementById("errorAjax").innerHTML = "Enregistrement réussi !";
+    var reponse = JSON.parse(req.response);
+    document.getElementById("errorAjax").innerHTML =
+      "Enregistrement réussi ! ID : " + reponse.result.id;
     console.log(
       "Réponse reçue: \n-------------\n",
       req.response,
@@ -269,6 +272,7 @@ function enregistrerDocument() {
     Requete AJAX pour récupérer un document enregistrer
 */
 function recupererDocument() {
+  hideZones();
   var id = document.getElementById("urlInputGetDocument").value;
   if (id) {
     var req = new XMLHttpRequest();
@@ -279,16 +283,19 @@ function recupererDocument() {
     var txt = JSON.stringify(data);
     req.send(txt);
     if (req.status === 200) {
+      var reponse = JSON.parse(req.response);
+      console.log(reponse);
       document.getElementById("errorAjax").innerHTML = "Récupération réussi !";
       console.log(
         "Réponse reçue: \n-------------\n",
         req.response,
         "\n-------------"
       );
-      document.getElementById("structureArborescente").innerHTML += addXMP(
-        data.html
+      document.getElementById("structureArborescente").innerHTML = addXMP(
+        reponse.result.html
       );
-      document.getElementById("zoneAffichage").innerHTML += data.html;
+      document.getElementById("zoneAffichage").innerHTML = reponse.result.html;
+      getInfoElement(document.getElementById("zoneAffichage").children);
     } else {
       console.log("Status de la réponse: %d (%s)", req.status, req.statusText);
       document.getElementById("errorAjax").innerHTML =

@@ -17,8 +17,8 @@
 
 <body>
   <h1>Visualisateur de DOM HTML/XML</h1>
-    <p id="errorAjax"></p>
-    
+  <p id="errorAjax"></p>
+
   <div class="form-row" style="margin-left: 2%">
     <div class="form-group col-md-2">
       <label class="col-form-label" for="inputEnregistrerDoc">Enregistrer le fichier : </label>
@@ -39,32 +39,41 @@
   </div>
   <div class="form-row" style="margin-left: 2%">
     <div class="form-group col-md-5">
-      <label class="col-form-label" for="uploadInput">Uploader le fichier <span class="warn">(HTML ou XML seulement)</span> : </label>
+      <label class="col-form-label" for="uploadInput">Uploader le fichier
+        <span class="warn">(HTML ou XML seulement)</span> : </label>
       <input class="form-control" id="uploadInput" type="file"></input>
     </div>
     <div class="col-md-2">
       <input class="btn btn-success" id="visualize" type="button" value="Visualiser" onclick="visualize()" />
     </div>
     <div class="form-group col-md-5">
-      <label class="col-form-label" for="urlInput">Entrez l'url du fichier<span class="warn">(HTML ou XML seulement)</span> : </label>
+      <label class="col-form-label" for="urlInput">Entrez l'url du fichier
+        <span class="warn">(HTML ou XML seulement)</span> : </label>
       <input class="form-control" id="urlInput" type="text" placeholder="http://..."></input>
     </div>
   </div>
 
   <!-- Visualisateur -->
+  <div class="form-row" style="margin-left: 2%">
+    <div class="form-group col-md-6">
+      <h2>Structure arborescente : </h2>
+    </div>
+    <div class="form-group col-md-6">
+      <h2>Zone d'affichage : </h2>
+    </div>
+  </div>
+
+
   <div class="separationH"></div>
   <div id="zones">
     <div id="structureArborescente">
-      <h2>Structure arborescente : </h2>
     </div>
     <div class="separationV"></div>
     <div id="zoneAffichage">
-      <h2 class='titreZoneAfichage'>Zone d'affichage : </h2>
     </div>
   </div>
   <div class="separationH"></div>
   <div id="infoElement">
-    <h2>Informations Balise :</h2>
     <ul class="list-group">
     </ul>
   </div>
